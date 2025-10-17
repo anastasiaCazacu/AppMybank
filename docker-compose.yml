@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   postgres:
@@ -7,11 +7,13 @@ services:
     environment:
       POSTGRES_DB: mybankdb
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: yourPassword
+      POSTGRES_PASSWORD: myPassword
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+
 
   app:
     build: .
@@ -22,9 +24,9 @@ services:
 #       - "5432:5432"
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mybankdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://mybank-db:5432/mybankdb
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: yourPassword
+      SPRING_DATASOURCE_PASSWORD: myPassword
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
 
