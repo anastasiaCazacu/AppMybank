@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mybank
+    username: postgres
+    password: your_password
+    driver-class-name: org.postgresql.Driver
+
+jwt:
+  secret: bXlCYW5rQXBwU2VjcmV0S2V5MTIzIT8kKiYoQDMyU2VjdXJlU3RhdGljS2V5QmFuazY0

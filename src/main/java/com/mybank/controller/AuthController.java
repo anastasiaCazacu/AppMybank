@@ -1,8 +1,6 @@
 package com.mybank.controller;
 
-import com.mybank.dto.LoginDTO;
 import com.mybank.dto.UserDTO;
-import com.mybank.dto.JwtResponseDTO;
 import com.mybank.dto.JwtResponseDTO;
 import com.mybank.entity.Role;
 import com.mybank.entity.User;

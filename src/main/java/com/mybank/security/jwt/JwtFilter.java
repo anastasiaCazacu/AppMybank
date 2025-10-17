@@ -26,9 +26,21 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain)
             throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        //  Permite accesul fara JWT pentru rutele publice
+        if (path.equals("/") || path.startsWith("/home") || path.startsWith("/auth") ||
+                path.startsWith("/about") || path.startsWith("/contact")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // Validarea JWT pentru rutele protejate
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
@@ -46,4 +58,5 @@ public class JwtFilter extends OncePerRequestFilter {
 
         chain.doFilter(request, response);
     }
+
 }
