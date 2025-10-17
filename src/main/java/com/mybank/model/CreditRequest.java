@@ -17,4 +17,6 @@ public class CreditRequest {
     public Long getUserId() {
         return userId;
     }
+
+    public BigDecimal getAmount() { return amount;}
 }

@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+//import java.time.Date;
+//import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,15 +21,17 @@ public class Credit {
     private BigDecimal amount;
 
     @NotNull
-    private LocalDate  date;
+    private Date date;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "credit_user",
-            joinColumns = @JoinColumn(name = "credit_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users;
+    @OneToMany(mappedBy = "credit")
+    private List<UserCredit> usersCredits;
 
     //Getteri, setteri, constructori
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
 }

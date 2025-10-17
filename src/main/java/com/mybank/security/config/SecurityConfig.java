@@ -22,22 +22,19 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/home", "/about",
-                                                    "/contact", "/terms", "/faq",
-                                                    "/actuator/health", "/ping", "/status").permitAll()
+                        .requestMatchers("/","/auth/**"
+                                , "/home", "/about","/contact").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/bank/**").hasRole("BANK")
                         .requestMatchers("/client/**", "/credits", "/deposits").hasRole("CLIENT")
                         .anyRequest().authenticated()
                         //ToDo sa fac sesiunile sesiune managemt sesionCreatedPolicy.(pentru fiece utilizator o sesiune)
                         //.autentificationProvider()
-                        //@Bean  public Autenti
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

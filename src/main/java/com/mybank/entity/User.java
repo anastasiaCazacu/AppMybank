@@ -31,10 +31,11 @@ public class User {
     @JoinColumn(name = "role_id") // Cheia străină în tabelul users
     private Role role; //  corect: entitate deoarece e Role entitate
 
-    @ManyToMany(mappedBy = "user", fetch = FetchType.LAZY)//relatia cu creditele
-    private List<Credit> credits;
+    //credit
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)//relatia cu creditele
+    private List<UserCredit> userCredits;
 
-    @OneToMany(mappedBy = "user")//relatia cu depozitele
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)//relatia cu depozitele
     private List<Deposit> deposits;
 
     // Getteri și setteri
@@ -64,8 +65,8 @@ public class User {
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
 
-    public List<Credit> getCredits() { return credits; }
-    public void setCredits(List<Credit> credits) { this.credits = credits; }
+    public List<UserCredit> getUserCredits() { return userCredits; }
+    public void setUserCredits(List<UserCredit> userCredits) { this.userCredits = userCredits; }
 
     public List<Deposit> getDeposits() { return deposits; }
     public void setDeposits(List<Deposit> deposits) { this.deposits = deposits; }

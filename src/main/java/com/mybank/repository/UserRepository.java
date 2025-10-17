@@ -1,5 +1,6 @@
 package com.mybank.repository;
 
+import com.mybank.entity.Role;
 import com.mybank.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,6 +11,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);// Caută utilizatorul după username
 
-    List<User> findByRole(String role);  // pentru filtrare
+    List<User> findByRole(Role role);  // pentru filtrare
+    List<User> findByRole_Name(String name);
+
 }
 

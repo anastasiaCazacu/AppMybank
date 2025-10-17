@@ -6,7 +6,10 @@ import com.mybank.exception.ResourceNotFoundException;
 import com.mybank.model.CreditRequest;
 import com.mybank.repository.CreditRepository;
 import com.mybank.repository.UserRepository;
+import org.springframework.stereotype.Service;
+import java.util.Date;
 
+@Service
 public class CreditService {
     private  final CreditRepository creditRepository;
     private  final UserRepository userRepository;
@@ -21,6 +24,8 @@ public class CreditService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Credit credit = new Credit();
-        return credit;
+        credit.setAmount(request.getAmount());
+        credit.setDate(new Date(System.currentTimeMillis()));
+        return creditRepository.save(credit);
     }
 }

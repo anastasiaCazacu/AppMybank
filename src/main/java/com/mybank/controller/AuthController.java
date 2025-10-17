@@ -82,18 +82,18 @@ public class AuthController {
 
     // ✅ Autentificare utilizator
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             // Autentifică utilizatorul
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Autentificare eșuată.");
         }
 
         // Caută utilizatorul și generează token
-        Optional<User> userOpt = userRepository.findByUsername(dto.getUsername());
+        Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
         if (userOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Utilizator inexistent.");
         }
