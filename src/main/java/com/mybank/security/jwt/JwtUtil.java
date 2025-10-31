@@ -16,7 +16,7 @@ public class JwtUtil {
 
     //private static final String SECRET_KEY ="bXlCYW5rQXBwU2VjcmV0S2V5MTIzIT8kKiYoQDMyU2VjdXJlU3RhdGljS2V5QmFuazY0"; //  cheia secreta, generam
     // prin comanda: openssl rand -base64 64
-    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 ore
+    private final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 ore este valabil
 
     @Value("${jwt.secret}")
     private String secret;
@@ -35,7 +35,6 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // când expiră
                 .signWith(getSigningKey()) // semnătura
                 .compact();
-
     }
 
     public String extractUsername(String token) {

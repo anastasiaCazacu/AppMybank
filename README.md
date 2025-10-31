@@ -164,3 +164,14 @@ La JwtUserDetails(sa poate loauduserByUsername) daca nu gaseste un user- atunci 
 
 avem dejaexceptie, eroare
 Vom mai face JwtAuthFilter
+
+### In clasa:
+
+- JVT-nu unem in jwtAuthFilter- nu punem date sensibile
+
+
+## Realizari pana in 25 octobrie
+
+- extend: DepositType - ca sa pot avea mai multe tipuri de depozite, acelasi lucru va fi si pentru credite
+- doar cu userul care in creaza "ADMIN", "BANK" poti crea depozite. 
+- La fel doar cu userul care in creaza "ADMIN", "BANK" va crea credite

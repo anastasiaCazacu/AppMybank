@@ -6,7 +6,10 @@ import com.mybank.exception.ResourceNotFoundException;
 import com.mybank.model.CreditRequest;
 import com.mybank.repository.CreditRepository;
 import com.mybank.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,7 @@ public class CreditService {
     private final CreditRepository creditRepository;
     private final UserRepository userRepository;
 
+    @Autowired
     public CreditService(CreditRepository creditRepository, UserRepository userRepository) {
         this.creditRepository = creditRepository;
         this.userRepository = userRepository;
@@ -60,6 +64,21 @@ public class CreditService {
 
     //Total credite într-o zi
     public int countCreditsByDate(Date date) {
-        return getCreditsByDate(date).size();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date startOfDay = cal.getTime();
+
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        Date endOfDay = cal.getTime();
+
+        return creditRepository.findByDateBetween(startOfDay, endOfDay).size();
     }
+
+//    public int countCreditsByDate(Date date) {
+//        return getCreditsByDate(date).size();
+//    }
 }
