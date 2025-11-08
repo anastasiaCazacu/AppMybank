@@ -2,12 +2,17 @@ package com.mybank.controller;
 
 import com.mybank.dto.UserDTO;
 import com.mybank.dto.JwtResponseDTO;
+import com.mybank.dto.auth.JwtPairResponse;
+import com.mybank.dto.auth.JwtResponse;
+import com.mybank.dto.auth.RefreshRequest;
 import com.mybank.entity.Role;
 import com.mybank.entity.User;
 import com.mybank.repository.RoleRepository;
 import com.mybank.repository.UserRepository;
 import com.mybank.security.jwt.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,9 +54,11 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    // ✅ Înregistrare utilizator
+    @Autowired private UserDetailsServiceImpl userDetailsService;
+
+    //  Înregistrare utilizator
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserDTO dto) {
+    public ResponseEntity<?> register(@Valid @RequestBody UserDTO dto) {
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             return ResponseEntity.badRequest().body("Parolele nu coincid.");
         }
@@ -60,14 +67,14 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Username deja existent.");
         }
 
-        Role role = roleRepository.findByName(dto.getRoleName());
+        Role role = roleRepository.findByName(dto.getRoleName().toUpperCase());
         if (role == null) {
             return ResponseEntity.badRequest().body("Rol invalid.");
         }
 
         User user = new User();
         user.setUsername(dto.getUsername());
-        user.setPassword(passwordEncoder.encode(dto.getPassword())); // parolele se criptează
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setFullname(dto.getFullname());
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
@@ -78,32 +85,91 @@ public class AuthController {
         return ResponseEntity.ok("Utilizator înregistrat cu succes.");
     }
 
-    // ✅ Autentificare utilizator
+    //  Autentificare → returnează access + refresh token
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        try {
-            // Autentifică utilizatorul
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-            );
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Autentificare eșuată.");
-        }
+    public ResponseEntity<JwtPairResponse> login(@RequestBody LoginRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+        );
 
-        // Caută utilizatorul și generează token
-        Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Utilizator inexistent.");
-        }
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+        String accessToken = jwtUtil.generateAccessToken(userDetails);
+        String refreshToken = jwtUtil.generateRefreshToken(userDetails);
 
-        User user = userOpt.get();
-        UserDetails userDetails = org.springframework.security.core.userdetails.User
-                .withUsername(user.getUsername())
-                .password(user.getPassword())
-                .roles(user.getRole().getName()) // rolul pentru JWT
-                .build();
-
-        String token = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponseDTO(token, user.getRole().getName()));
+        return ResponseEntity.ok(new JwtPairResponse(accessToken, refreshToken));
     }
+
+    //  Reînnoire access token
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshRequest request) {
+        String username = jwtUtil.extractUsername(request.getRefreshToken());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        if (jwtUtil.validateToken(request.getRefreshToken(), userDetails)) {
+            String newAccessToken = jwtUtil.generateAccessToken(userDetails);
+            String role = userDetails.getAuthorities().iterator().next().getAuthority();
+
+            return ResponseEntity.ok(new JwtResponse(newAccessToken, role));
+
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+//    //  Înregistrare utilizator
+//    @PostMapping("/register")
+//    public ResponseEntity<?> register(@RequestBody UserDTO dto) {
+//        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+//            return ResponseEntity.badRequest().body("Parolele nu coincid.");
+//        }
+//
+//        if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
+//            return ResponseEntity.badRequest().body("Username deja existent.");
+//        }
+//
+//        Role role = roleRepository.findByName(dto.getRoleName());
+//        if (role == null) {
+//            return ResponseEntity.badRequest().body("Rol invalid.");
+//        }
+//
+//        User user = new User();
+//        user.setUsername(dto.getUsername());
+//        user.setPassword(passwordEncoder.encode(dto.getPassword())); // parolele se criptează
+//        user.setFullname(dto.getFullname());
+//        user.setEmail(dto.getEmail());
+//        user.setPhone(dto.getPhone());
+//        user.setAddress(dto.getAddress());
+//        user.setRole(role);
+//
+//        userRepository.save(user);
+//        return ResponseEntity.ok("Utilizator înregistrat cu succes.");
+//    }
+//
+//    //  Autentificare utilizator
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+//        try {
+//            // Autentifică utilizatorul
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+//            );
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body("Autentificare eșuată.");
+//        }
+//
+//        // Caută utilizatorul și generează token
+//        Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
+//        if (userOpt.isEmpty()) {
+//            return ResponseEntity.badRequest().body("Utilizator inexistent.");
+//        }
+//
+//        User user = userOpt.get();
+//        UserDetails userDetails = org.springframework.security.core.userdetails.User
+//                .withUsername(user.getUsername())
+//                .password(user.getPassword())
+//                .roles(user.getRole().getName()) // rolul pentru JWT
+//                .build();
+//
+//        String token = jwtUtil.generateToken(userDetails);
+//        return ResponseEntity.ok(new JwtResponseDTO(token, user.getRole().getName()));
+//    }
 }

@@ -1,6 +1,6 @@
 package com.mybank.dto.deposit;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class DepositResponseDTO {
     private Long id;

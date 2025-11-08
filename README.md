@@ -175,3 +175,11 @@ Vom mai face JwtAuthFilter
 - extend: DepositType - ca sa pot avea mai multe tipuri de depozite, acelasi lucru va fi si pentru credite
 - doar cu userul care in creaza "ADMIN", "BANK" poti crea depozite. 
 - La fel doar cu userul care in creaza "ADMIN", "BANK" va crea credite
+
+## AM REALIZAT 0811.25:
+Dacă totul merge în Postman — inclusiv logarea — înseamnă că ai reușit să:
+- ✅ Configurezi corect JWT (cheie secretă, expirare, filtre)
+- ✅ Salvezi utilizatorul cu rolul potrivit (CLIENT, ADMIN, etc.)
+- ✅ Generezi și validezi tokenul în AuthController
+- ✅ Protejezi endpointurile cu SecurityFilterChain și @PreAuthorize sau .hasRole(...)
+- ✅ Testezi cu succes în Postman: login, acces cu token, refresh

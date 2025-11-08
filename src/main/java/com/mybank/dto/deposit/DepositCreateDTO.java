@@ -2,7 +2,7 @@ package com.mybank.dto.deposit;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class DepositCreateDTO {
     @NotNull
