@@ -176,7 +176,7 @@ Vom mai face JwtAuthFilter
 - doar cu userul care in creaza "ADMIN", "BANK" poti crea depozite. 
 - La fel doar cu userul care in creaza "ADMIN", "BANK" va crea credite
 
-## AM REALIZAT 0811.25:
+## AM REALIZAT 08.11.25:
 Dacă totul merge în Postman — inclusiv logarea — înseamnă că ai reușit să:
 - ✅ Configurezi corect JWT (cheie secretă, expirare, filtre)
 - ✅ Salvezi utilizatorul cu rolul potrivit (CLIENT, ADMIN, etc.)
