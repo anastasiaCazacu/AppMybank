@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/mybank
+    url: jdbc:postgresql://localhost:5432/mybankdb
     username: postgres
-    password: your_password
+    password: password
     driver-class-name: org.postgresql.Driver
 
 jwt:

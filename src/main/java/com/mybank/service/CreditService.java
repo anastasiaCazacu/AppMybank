@@ -4,6 +4,7 @@ import com.mybank.entity.Credit;
 import com.mybank.entity.User;
 import com.mybank.exception.ResourceNotFoundException;
 import com.mybank.model.CreditRequest;
+import com.mybank.model.CreditResponse;
 import com.mybank.repository.CreditRepository;
 import com.mybank.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +26,40 @@ public class CreditService {
         this.userRepository = userRepository;
     }
 
-    // ✅ Creează un credit nou
-    public Credit createCredit(CreditRequest request) throws ResourceNotFoundException {
+    //  Creează un credit nou
+    public CreditResponse createCredit(CreditRequest request) throws ResourceNotFoundException {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Credit credit = new Credit();
         credit.setAmount(request.getAmount());
         credit.setDate(new Date(System.currentTimeMillis()));
-        // Poți seta usersCredits aici dacă ai entitatea intermediară
-        return creditRepository.save(credit);
+        credit.setApprovedBy(request.getApprovedBy());
+        credit.setInterestRate(request.getInterestRate());
+        credit.setTermMonths(request.getTermMonths());
+
+        //  verificăm dacă dueDate a fost trimis în request
+        if (request.getDueDate() != null) {
+            credit.setDueDate(java.sql.Date.valueOf(request.getDueDate()));
+            // dacă în Credit ai java.util.Date, convertim din LocalDate
+        } else {
+            // fallback: dacă nu e setat, punem data curentă sau o regulă implicită
+            credit.setDueDate(new Date(System.currentTimeMillis()));
+        }
+
+        //TODO: De adaugat userul
+        Credit db_Credit = creditRepository.save(credit);
+
+        CreditResponse creditResponse = new CreditResponse();
+        creditResponse.setId(db_Credit.getId());
+        creditResponse.setApprovedBy(request.getApprovedBy());
+        creditResponse.setAmount(request.getAmount());
+        creditResponse.setTermMonths(request.getTermMonths());
+        creditResponse.setInterestRate(request.getInterestRate());
+        creditResponse.setDueDate(request.getDueDate());
+        creditResponse.setUserName(user.getFullname());
+
+        return creditResponse;
     }
 
     //Găsește credite într-un interval de date

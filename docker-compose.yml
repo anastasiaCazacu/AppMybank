@@ -5,9 +5,9 @@ services:
     image: postgres:15
     container_name: mybank-db
     environment:
-      POSTGRES_DB: mybankdb
+      POSTGRES_DB: mybank
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: myPassword
+      POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
     volumes:
@@ -26,7 +26,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://mybank-db:5432/mybankdb
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: myPassword
+      SPRING_DATASOURCE_PASSWORD: password
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
 

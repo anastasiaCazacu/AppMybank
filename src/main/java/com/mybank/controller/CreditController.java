@@ -3,6 +3,7 @@ package com.mybank.controller;
 import com.mybank.entity.Credit;
 import com.mybank.exception.ResourceNotFoundException;
 import com.mybank.model.CreditRequest;
+import com.mybank.model.CreditResponse;
 import com.mybank.service.CreditService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -26,9 +27,9 @@ public class CreditController {
 
     //Creează un credit nou
     @PostMapping("/create")
-    public ResponseEntity<Credit> createCredit(@RequestBody CreditRequest request) {
+    public ResponseEntity<CreditResponse> createCredit(@RequestBody CreditRequest request) {
         try {
-            Credit credit = creditService.createCredit(request);
+            CreditResponse credit = creditService.createCredit(request);
             return ResponseEntity.ok(credit);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
