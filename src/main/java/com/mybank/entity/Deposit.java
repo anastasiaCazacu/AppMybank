@@ -1,6 +1,10 @@
 package com.mybank.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.util.Date;
 
@@ -10,8 +14,9 @@ public class Deposit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    private Double amount;
+    @NotNull
+    @Positive
+    private Double amount; //
 
     @Temporal(TemporalType.DATE)
     private Date startDate;
@@ -19,6 +24,9 @@ public class Deposit {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
+    @NotNull
+    @Min(0)
+    @Max(100)
     private Double rate; // rata
 
     @Enumerated(EnumType.STRING)
@@ -42,6 +50,18 @@ public class Deposit {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
+    }
+
 
     //getere si setere
 }
