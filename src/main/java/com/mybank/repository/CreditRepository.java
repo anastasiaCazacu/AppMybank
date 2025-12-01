@@ -14,14 +14,18 @@ public interface CreditRepository extends JpaRepository<Credit, Long> {
     // Găsește credite într-un interval de date
     List<Credit> findByDateBetween(Date start, Date end);
 
-    //Găsește credite exact la o dată
-    List<Credit> findByDate(Date date);
+//    //Găsește credite exact la o dată
+//    @Query("SELECT c FROM Credit c WHERE  FUNCTION('DATE', c.date) = :date")
+//    List<Credit> findByDate(@Param("date")Date date);
 
     //Găsește toate creditele asociate unui utilizator (prin entitatea intermediară)
     @Query("SELECT c FROM Credit c JOIN c.usersCredits uc WHERE uc.user.id = :userId")
     List<Credit> findAllByUserId(@Param("userId") Long userId);
 
     //Găsește toate creditele aprobate de un utilizator
-    @Query("SELECT c FROM Credit c JOIN c.usersCredits uc WHERE uc.approvedBy = :username")
+    @Query("SELECT c FROM Credit c WHERE c.approvedBy = :username")
     List<Credit> findAllApprovedBy(@Param("username") String username);
+
+    @Query("SELECT c FROM Credit c JOIN c.usersCredits uc WHERE c.active=true AND uc.user.id = :userId")
+    List<Credit> findActiveByUserId(@Param("userId") Long userId);
 }

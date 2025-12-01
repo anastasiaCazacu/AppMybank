@@ -2,6 +2,7 @@ package com.mybank.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,9 @@ public class User {
     private String phone;
     private String address;
 
+    private Date dateOfBirth;
+    private Double monthlyIncome;
+
     @ManyToOne(fetch = FetchType.EAGER)// Relație cu rolul
     @JoinColumn(name = "role_id") // Cheia străină în tabelul users
     private Role role; //  corect: entitate deoarece e Role entitate
@@ -40,6 +44,19 @@ public class User {
 
     // Getteri și setteri
     public Long getId() { return id; }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setMonthlyIncome(Double monthlyIncome) {
+        this.monthlyIncome = monthlyIncome;
+    }
+    public Double getMonthlyIncome() {return monthlyIncome;}
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }

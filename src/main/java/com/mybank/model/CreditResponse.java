@@ -14,7 +14,14 @@ public class CreditResponse {
     private LocalDate dueDate;
     private String approvedBy;
 
+    private BigDecimal monthlyIncome;
+    private BigDecimal debtRatio;
+
     // Getters
+    public BigDecimal getMonthlyIncome() {return monthlyIncome;}
+    public void setMonthlyIncome(BigDecimal monthlyIncome) {this.monthlyIncome = monthlyIncome;}
+    public BigDecimal getDebtRatio() {return debtRatio;}
+
     public Long getId() {
         return id;
     }
@@ -48,6 +55,14 @@ public class CreditResponse {
     }
 
     // Setters
+
+
+    public void setDebtRatio(BigDecimal debtRatio) {
+        this.debtRatio = debtRatio;
+    }
+    public void setMonthlyIncome(LocalDate date) {
+        this.date = date;
+    }
     public void setId(Long id) {
         this.id = id;
     }

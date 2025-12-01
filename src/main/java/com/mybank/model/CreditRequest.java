@@ -31,6 +31,16 @@ public class CreditRequest {
 
     private String approvedBy;
 
+    @NotNull(message = "Monthly income is required")
+    @DecimalMin(value = "0.01", message = "Monthly income must be positive")
+    private BigDecimal monthlyIncome;
+
+    @NotNull(message = "Debt ratio is required")
+    @DecimalMin(value = "0.0", inclusive = true, message = "Debt ratio cannot be negative")
+    @DecimalMax(value = "1.0", inclusive = true, message = "Debt ratio cannot exceed 1.0")
+    private BigDecimal debtRatio;
+
+
     // Getters
     public Long getUserId() {
         return userId;
@@ -54,6 +64,14 @@ public class CreditRequest {
 
     public String getApprovedBy() {
         return approvedBy;
+    }
+
+    public BigDecimal getMonthlyIncome() {
+        return monthlyIncome;
+    }
+
+    public BigDecimal getDebtRatio() {
+        return debtRatio;
     }
 
     // Setters
@@ -80,4 +98,13 @@ public class CreditRequest {
     public void setApprovedBy(String approvedBy) {
         this.approvedBy = approvedBy;
     }
+
+    public void setMonthlyIncome(BigDecimal monthlyIncome) {
+        this.monthlyIncome = monthlyIncome;
+    }
+
+    public void setDebtRatio(BigDecimal debtRatio) {
+        this.debtRatio = debtRatio;
+    }
+
 }

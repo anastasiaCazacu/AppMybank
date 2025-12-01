@@ -183,3 +183,13 @@ Dacă totul merge în Postman — inclusiv logarea — înseamnă că ai reușit
 - ✅ Generezi și validezi tokenul în AuthController
 - ✅ Protejezi endpointurile cu SecurityFilterChain și @PreAuthorize sau .hasRole(...)
 - ✅ Testezi cu succes în Postman: login, acces cu token, refresh
+
+## TODO:
+PROPUNERE DE ORDINE IMPLEMENTARE
+- validările pentru acordarea creditului
+- ✅ Finalizează entitățile și relațiile (User, Role, Credit, Deposit, DepositType)
+- 🔐 Configurează Spring Security (login, logout, roluri)
+- 🧾 Creează DTO-uri pentru toate entitățile (Request + Response)
+- 🛠️ Implementează validările la credit (vârstă, venit, etc.)
+- 🧑‍⚖️ Adaugă restricții pe roluri în controller/service
+-+ 🚨 Configurează handler global pentru erori

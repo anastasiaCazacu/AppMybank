@@ -8,6 +8,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
+import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.List;
 
 public class UserDTO {
@@ -19,6 +21,9 @@ public class UserDTO {
     private String phone;
     private String address;
     private String roleName; // Exemplu: "CLIENT", "BANK", "ADMIN"
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
+
 
     // Getteri și setteri
     public String getUsername() { return username; }
@@ -44,6 +49,13 @@ public class UserDTO {
 
     public String getRoleName() { return roleName; }
     public void setRoleName(String roleName) { this.roleName = roleName; }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
 
 //    @ManyToOne(fetch = FetchType.EAGER)// Relație cu rolul
