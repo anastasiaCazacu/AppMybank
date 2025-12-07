@@ -67,10 +67,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Username deja existent.");
         }
 
-        Role role = roleRepository.findByName(dto.getRoleName().toUpperCase());
-        if (role == null) {
-            return ResponseEntity.badRequest().body("Rol invalid.");
-        }
+        Role role = roleRepository.findByName(userDTO.getRoleName())
+                .orElseThrow(() -> new RuntimeException("Rolul nu a fost găsit"));
 
         User user = new User();
         user.setUsername(dto.getUsername());
@@ -89,7 +87,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<JwtPairResponse> login(@RequestBody LoginRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.getUsername(),
+                        request.getPassword())
         );
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());

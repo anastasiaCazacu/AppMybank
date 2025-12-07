@@ -10,16 +10,34 @@ mybank/
 │   │   │       └── mybank/
 │   │   │           ├── MybankApplication.java         # punctul de intrare
 │   │   │
-│   │   │           ├── config/                        # configurări globale
-│   │   │           │   ├── SecurityConfig.java        # acces, autentificare
-│   │   │           │   └── SwaggerConfig.java         # documentație API
+│   │   │           ├── config/
+│   │   │           │   └── JwtProperties 
+│   │   │           │   ├── StartupConfig        
+│   │   │           │   └── SwaggerConfig        
 │   │   │
 │   │   │           ├── controller/                    # endpointuri REST
-│   │   │           │   ├── PublicBankController.java  # acces liber
+│   │   │           │   ├── AuthController.java
 │   │   │           │   ├── CreditController.java      # gestionare credite
 │   │   │           │   ├── DepositController.java     # gestionare depozite
+│   │   │           │   ├── DepositTypeController.java
+│   │   │           │   ├── HomeController.java
 │   │   │           │   └── UserController.java        # gestionare utilizatori
 │   │   │
+│   │   │           ├── dto/                        # 
+│   │   │           │   ├── auth/
+│   │   │           │   │    ├──  JwtPairResponse
+│   │   │           │   │    ├──  JwtResponse
+│   │   │           │   │    ├──  RefreshRequest
+│   │   │           │   ├── deposit/
+│   │   │           │   │    ├──  .java
+│   │   │           │   │    ├──  .java
+│   │   │           │   │    ├──  .java
+│   │   │           │   ├── depositType/
+│   │   │           │   │    ├──  .java
+│   │   │           │   │    ├──  .java
+│   │   │           │   │    ├──  .java
+│   │   │           │   ├── JwrRespons.java
+│   │   │           │   └── UserDTO
 │   │   │           ├── entity/                        # entități JPA
 │   │   │           │   ├── User.java
 │   │   │           │   ├── Credit.java
@@ -49,20 +67,25 @@ mybank/
 │   │   └── resources/
 │   │       ├── application.properties                 # configurări Spring
 │   │       ├── static/                                # fișiere UI (HTML, CSS, JS)
+|   |       └── application.yml
 │   │       └── templates/                             # pagini Thymeleaf (dacă folosești)
 │
 ├── test/                                              # teste unitare și de integrare
+│   └── resources/
+|       └──pplication-test.properties
 │   └── java/
 │       └── com/
 │           └── mybank/
 │               ├── CreditServiceTest.java
 │               └── UserControllerTest.java
+|               |__MybankApplicationTests
 │
 ├── target/                                            # generat automat
 │
 ├── pom.xml                                            # configurare Maven
 ├── Dockerfile                                         # imagine Docker
 └── docker-compose.yml                                 # orchestrare containere
+└── pom.xml
 
 # 📦 Structura
 
